@@ -1,13 +1,31 @@
-const handleSubmit = async (event) => {
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.new-restaurant-form form');
+
+    form.addEventListener('submit', handleSubmit);
+});
+
+// form submission
+async function handleSubmit(event) {
     event.preventDefault(); 
 
-    // Extract fields from the form, and
-    // send a request to create a new restaurant
+    const formData = new FormData(event.target); 
+    const newRestaurant = Object.fromEntries(formData.entries()); 
 
+    try {
+        const response = await fetch('/api/restaurants', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newRestaurant),
+        });
+
+        if (response.ok) {
+            window.location.href = '/restaurants';
+        } else {
+            console.error('Failed to create a new restaurant');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
- 
-    // Add event listener to the form for submit events
-
-});
